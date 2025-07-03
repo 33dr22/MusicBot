@@ -6,7 +6,7 @@ const app = express();
 const port = 3000;
 
 app.get('/', (req, res) => {
-  res.send('Discord Music Bot is running!');
+  res.send('YAPPINGPERSON is running!');
 });
 
 app.listen(port, '0.0.0.0', () => {
@@ -45,35 +45,35 @@ const manager = new Manager({
 const commands = [
   new SlashCommandBuilder()
     .setName('play')
-    .setDescription('Plays a song')
+    .setDescription('Memutar lagu dari nama/URL')
     .addStringOption(option => 
       option.setName('query')
-        .setDescription('Song name or URL')
+        .setDescription('Nama lagu atau URL')
         .setRequired(true)),
   new SlashCommandBuilder()
     .setName('pause')
-    .setDescription('Pause the current song'),
+    .setDescription('Menghentikan pemutaran lagu saat ini'),
   new SlashCommandBuilder()
     .setName('resume')
-    .setDescription('Resume the current song'),
+    .setDescription('Melanjutkan pemutaran lagu'),
   new SlashCommandBuilder()
     .setName('skip')
-    .setDescription('Skip to the next song'),
+    .setDescription('Melewati lagu saat ini'),
   new SlashCommandBuilder()
     .setName('queue')
-    .setDescription('Show the current queue'),
+    .setDescription('Menunjukkan antrian lagu'),
   new SlashCommandBuilder()
     .setName('nowplaying')
-    .setDescription('Show currently playing song'),
+    .setDescription('Menunjukkan lagu yang diputar'),
   new SlashCommandBuilder()
     .setName('shuffle')
-    .setDescription('Shuffle the queue'),
+    .setDescription('Mengacak antrian lagu'),
   new SlashCommandBuilder()
     .setName('loop')
-    .setDescription('Toggle loop mode')
+    .setDescription('Pengulangan lagu')
     .addStringOption(option =>
       option.setName('mode')
-        .setDescription('Loop mode')
+        .setDescription('Mode pengulangan')
         .setRequired(true)
         .addChoices(
           { name: 'Off', value: 'off' },
@@ -82,53 +82,53 @@ const commands = [
         )),
   new SlashCommandBuilder()
     .setName('remove')
-    .setDescription('Remove a song from the queue')
+    .setDescription('Menghapus lagu dari antrian')
     .addIntegerOption(option =>
       option.setName('position')
-        .setDescription('Position in queue')
+        .setDescription('Posisi di antrian')
         .setRequired(true)),
   new SlashCommandBuilder()
     .setName('move')
-    .setDescription('Move a song to a different position')
+    .setDescription('Pindahkan lagu ke posisi lain')
     .addIntegerOption(option =>
       option.setName('from')
-        .setDescription('From position')
+        .setDescription('Dari posisi')
         .setRequired(true))
     .addIntegerOption(option =>
       option.setName('to')
-        .setDescription('To position')
+        .setDescription('Ke posisi')
         .setRequired(true)),
   new SlashCommandBuilder()
     .setName('clearqueue')
-    .setDescription('Clear the queue'),
+    .setDescription('Bersihkan antrian'),
   new SlashCommandBuilder()
     .setName('stop')
-    .setDescription('Stops the music and leaves'),
+    .setDescription('Stop musik dan disconnect'),
   new SlashCommandBuilder()
     .setName('volume')
-    .setDescription('Set the volume')
+    .setDescription('Atur volume')
     .addIntegerOption(option =>
       option.setName('level')
-        .setDescription('Volume level (0-100)')
+        .setDescription('Level volume (0-100)')
         .setRequired(true)),
   new SlashCommandBuilder()
     .setName('247')
-    .setDescription('Toggle 24/7 mode'),
+    .setDescription('Beralih ke mode 24/7'),
   new SlashCommandBuilder()
     .setName('help')
-    .setDescription('Shows all commands'),
+    .setDescription('Tampilkan semua commands'),
   new SlashCommandBuilder()
     .setName('invite')
-    .setDescription('Get bot invite link'),
+    .setDescription('Link invite BOT'),
   new SlashCommandBuilder()
     .setName('ping')
-    .setDescription('Shows bot ping'),
+    .setDescription('Tunjukkan ping BOT'),
   new SlashCommandBuilder()
     .setName('stats')
-    .setDescription('Shows bot statistics'),
+    .setDescription('Tunjukkan statistik BOT'),
   new SlashCommandBuilder()
     .setName('support')
-    .setDescription('Join our support server'),
+    .setDescription('Join support server'),
 
 ].map(command => command.toJSON());
 
@@ -138,7 +138,7 @@ client.once('ready', async () => {
   console.log(`Logged in as ${client.user.tag}`);
   manager.init(client.user.id);
 
-  client.user.setActivity('/help | https://github.com/Unknownzop/MusicBot', { type: ActivityType.Listening });
+  client.user.setActivity('/help | BOT Musik', { type: ActivityType.Listening });
 
   try {
     console.log('Refreshing slash commands...');
@@ -153,11 +153,11 @@ client.on('raw', (data) => manager.updateVoiceState(data));
 
 function createMusicEmbed(track) {
   return new EmbedBuilder()
-    .setTitle('🎵 Now Playing')
+    .setTitle('🎵 Sedang memutar')
     .setDescription(`[${track.title}](${track.uri})`)
     .addFields(
-      { name: '👤 Artist', value: track.author, inline: true },
-      { name: '⏱️ Duration', value: formatDuration(track.duration), inline: true }
+      { name: '👤 Artis', value: track.author, inline: true },
+      { name: '⏱️ Durasi', value: formatDuration(track.duration), inline: true }
     )
     .setThumbnail(track.thumbnail)
     .setColor('#FF0000');
@@ -202,7 +202,7 @@ client.on('interactionCreate', async (interaction) => {
 
   if (interaction.isButton()) {
     if (!interaction.member.voice.channel) {
-      return interaction.reply({ content: 'You need to join a voice channel to use the buttons!', ephemeral: true });
+      return interaction.reply({ content: 'Anda perlu bergabung dengan saluran suara untuk menggunakan tombol!', ephemeral: true });
     }
     const player = manager.players.get(interaction.guild.id);
     if (!player) return;
@@ -211,7 +211,7 @@ client.on('interactionCreate', async (interaction) => {
     if (!currentTrack) return;
 
     if (currentTrack.requester.id !== interaction.user.id) {
-      return interaction.reply({ content: 'Only the person who requested this song can use these buttons!', ephemeral: true });
+      return interaction.reply({ content: 'Hanya orang yang meminta lagu ini yang dapat menggunakan tombol ini!', ephemeral: true });
     }
 
     switch (interaction.customId) {
@@ -257,15 +257,15 @@ client.on('interactionCreate', async (interaction) => {
         break;
       case 'loop':
         player.setQueueRepeat(!player.queueRepeat);
-        await interaction.reply({ content: `Loop: ${player.queueRepeat ? 'Enabled' : 'Disabled'}`, ephemeral: true });
+        await interaction.reply({ content: `Loop: ${player.queueRepeat ? 'Diaktifkan' : 'Dinonaktifkan'}`, ephemeral: true });
         break;
       case 'queue':
         const queue = player.queue;
         const currentTrack = player.queue.current;
         let description = queue.length > 0 ? queue.map((track, i) => 
-          `${i + 1}. [${track.title}](${track.uri})`).join('\n') : 'No songs in queue';
+          `${i + 1}. [${track.title}](${track.uri})`).join('\n') : 'Tidak ada lagi diantrian';
 
-        if (currentTrack) description = `**Now Playing:**\n[${currentTrack.title}](${currentTrack.uri})\n\n**Queue:**\n${description}`;
+        if (currentTrack) description = `**Sekarang memutar:**\n[${currentTrack.title}](${currentTrack.uri})\n\n**Queue:**\n${description}`;
 
         const embed = new EmbedBuilder()
           .setTitle('Queue')
@@ -290,7 +290,7 @@ client.on('interactionCreate', async (interaction) => {
     });
 
     const embed = new EmbedBuilder()
-      .setDescription(`🎵 Applied filter: ${filters[filter]}`)
+      .setDescription(`🎵 Mengaktifkan filter: ${filters[filter]}`)
       .setColor('#FF0000')
       .setFooter({ 
         text: `Requested by ${interaction.user.tag}`,
@@ -306,7 +306,7 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'play') {
     if (!interaction.member.voice.channel) {
-      return interaction.reply({ content: 'Join a voice channel first!', ephemeral: true });
+      return interaction.reply({ content: 'Masuklah ke voice channel terlebih dahulu!', ephemeral: true });
     }
 
     const player = manager.create({
@@ -327,13 +327,13 @@ client.on('interactionCreate', async (interaction) => {
       case 'TRACK_LOADED':
       case 'SEARCH_RESULT':
         if (!res.tracks || res.tracks.length === 0) {
-          await interaction.reply({ content: 'No results found! Please try a different search term.', ephemeral: true });
+          await interaction.reply({ content: 'Tidak ada hasil yang ditemukan! Silakan coba istilah pencarian yang lain.', ephemeral: true });
           return;
         }
         const track = res.tracks[0];
         player.queue.add(track);
         const embed = new EmbedBuilder()
-          .setDescription(`Added [${track.title}](${track.uri}) to the queue`)
+          .setDescription(`Ditambahkan [${track.title}](${track.uri}) ke antrian`)
           .setColor('#FF0000')
           .setFooter({ 
             text: `Requested by ${interaction.user.tag}`,
@@ -344,21 +344,21 @@ client.on('interactionCreate', async (interaction) => {
         if (!player.playing && !player.paused) player.play();
         break;
       case 'NO_MATCHES':
-        await interaction.reply({ content: 'No results found! Please try a different search term.', ephemeral: true });
+        await interaction.reply({ content: 'Tidak ada hasil yang ditemukan! Silakan coba istilah pencarian yang lain.', ephemeral: true });
         break;
       case 'LOAD_FAILED':
-        await interaction.reply({ content: 'Failed to load track! Please try again or use a different link.', ephemeral: true });
+        await interaction.reply({ content: 'Gagal memuat trek! Silakan coba lagi atau gunakan URL lain.', ephemeral: true });
         break;
     }
   }
 
   if (commandName === 'pause') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     player.pause(true);
     const embed = new EmbedBuilder()
-      .setDescription('⏸️ Paused')
+      .setDescription('⏸️ Menghentikan pemutaran')
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -367,11 +367,11 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'resume') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memutar apa pun!', ephemeral: true });
 
     player.pause(false);
     const embed = new EmbedBuilder()
-      .setDescription('▶️ Resumed')
+      .setDescription('▶️ Melanjutkan pemutaran')
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -380,11 +380,11 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'skip') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     player.stop();
     const embed = new EmbedBuilder()
-      .setDescription('⏭️ Skipped')
+      .setDescription('⏭️ Melewati lagu')
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -393,18 +393,18 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'queue') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     const queue = player.queue;
     const currentTrack = player.queue.current;
     let description = queue.length > 0 ? queue.map((track, i) => 
-      `${i + 1}. [${track.title}](${track.uri})`).join('\n') : 'No songs in queue';
+      `${i + 1}. [${track.title}](${track.uri})`).join('\n') : 'Tidak ada lagu diantrian';
 
-    if (currentTrack) description = `**Now Playing:**\n[${currentTrack.title}](${currentTrack.uri})\n\n**Queue:**\n${description}`;
+    if (currentTrack) description = `**Sedang dimainkan:**\n[${currentTrack.title}](${currentTrack.uri})\n\n**Antrian:**\n${description}`;
 
     const embed = new EmbedBuilder()
-      .setTitle('🎵 Queue')
-      .setDescription(description)
+      .setTitle('🎵 Antrian')
+      .setDescription(`\n**Antrian:**\n${description}`)
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -413,10 +413,10 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'nowplaying') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     const track = player.queue.current;
-    if (!track) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!track) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     const embed = createMusicEmbed(track);
     await interaction.reply({ embeds: [embed] });
@@ -424,11 +424,11 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'shuffle') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     player.queue.shuffle();
     const embed = new EmbedBuilder()
-      .setDescription('🔀 Shuffled the queue')
+      .setDescription('🔀 Mengacak antrian')
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -437,7 +437,7 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'loop') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     const mode = options.getString('mode');
     switch (mode) {
@@ -456,7 +456,7 @@ client.on('interactionCreate', async (interaction) => {
     }
 
     const embed = new EmbedBuilder()
-      .setDescription(`🔄 Loop mode set to: ${mode}`)
+      .setDescription(`🔄 Mode loop diatur ke: ${mode}`)
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -465,16 +465,16 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'remove') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     const pos = options.getInteger('position') - 1;
     if (pos < 0 || pos >= player.queue.length) {
-      return interaction.reply({ content: 'Invalid position!', ephemeral: true });
+      return interaction.reply({ content: 'Posisi invalid', ephemeral: true });
     }
 
     const removed = player.queue.remove(pos);
     const embed = new EmbedBuilder()
-      .setDescription(`❌ Removed [${removed.title}](${removed.uri})`)
+      .setDescription(`❌ Menghapus [${removed.title}](${removed.uri})`)
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -483,13 +483,13 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'move') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     const from = options.getInteger('from') - 1;
     const to = options.getInteger('to') - 1;
 
     if (from < 0 || from >= player.queue.length || to < 0 || to >= player.queue.length) {
-      return interaction.reply({ content: 'Invalid position!', ephemeral: true });
+      return interaction.reply({ content: 'Posisi invalid', ephemeral: true });
     }
 
     const track = player.queue[from];
@@ -497,7 +497,7 @@ client.on('interactionCreate', async (interaction) => {
     player.queue.add(track, to);
 
     const embed = new EmbedBuilder()
-      .setDescription(`📦 Moved [${track.title}](${track.uri}) to position ${to + 1}`)
+      .setDescription(`📦 Berpindah [${track.title}](${track.uri}) ke posisi ${to + 1}`)
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -506,11 +506,11 @@ client.on('interactionCreate', async (interaction) => {
 
   if (commandName === 'clearqueue') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
 
     player.queue.clear();
     const embed = new EmbedBuilder()
-      .setDescription('🗑️ Cleared the queue')
+      .setDescription('🗑️ Bersihkan antrian')
       .setColor('#FF0000')
       .setFooter({ text: `Requested by ${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL() })
       .setTimestamp();
@@ -529,37 +529,37 @@ client.on('interactionCreate', async (interaction) => {
         stopMessage.edit({ components: [new ActionRowBuilder().addComponents(disabledButtons)] });
       }
       const stopEmbed = new EmbedBuilder()
-        .setDescription('Queue has ended!')
+        .setDescription('Antrian telah berakhir!')
         .setColor('#FF0000')
         .setTimestamp();
       await interaction.channel.send({ embeds: [stopEmbed] });
       player.destroy();
-      await interaction.reply({ content: '⏹️ Stopped the music and left', ephemeral: true });
+      await interaction.reply({ content: '⏹️ Stopped musik dan disconnect', ephemeral: true });
     } else {
-      await interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+      await interaction.reply({ content: 'Tidak memainkan apapun', ephemeral: true });
     }
   }
 
   if (commandName === 'volume') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'Not playing anything!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak memaknkan apapun', ephemeral: true });
 
     const volume = options.getInteger('level');
     if (volume < 0 || volume > 100) {
-      return interaction.reply({ content: 'Volume must be between 0 and 100!', ephemeral: true });
+      return interaction.reply({ content: 'Volume harus diantara 0 dan 100!', ephemeral: true });
     }
 
     player.setVolume(volume);
-    await interaction.reply(`🔊 Volume set to ${volume}%`);
+    await interaction.reply(`🔊 Volume diatur ke ${volume}%`);
   }
 
   if (commandName === '247') {
     const player = manager.players.get(interaction.guild.id);
-    if (!player) return interaction.reply({ content: 'No music is playing!', ephemeral: true });
+    if (!player) return interaction.reply({ content: 'Tidak ada musik yang dimainkan', ephemeral: true });
 
     player.twentyFourSeven = !player.twentyFourSeven;
     const embed = new EmbedBuilder()
-      .setDescription(`🎵 24/7 mode is now ${player.twentyFourSeven ? 'enabled' : 'disabled'}`)
+      .setDescription(`🎵 Mode 24/7 sekarang ${player.twentyFourSeven ? 'diaktifkan' : 'dinonaktifkan'}`)
       .setColor('#FF0000')
       .setFooter({ 
         text: `Requested by ${interaction.user.tag}`,
@@ -573,36 +573,36 @@ client.on('interactionCreate', async (interaction) => {
   if (commandName === 'help') {
     const embed = new EmbedBuilder()
       .setTitle(`🎵 ${client.user.username} Commands`)
-      .setDescription('Your ultimate music companion with high-quality playback!')
+      .setDescription('BOT musik terbaik dengan pemutaran berkualitas tinggi')
       .addFields(
-        { name: '🎵 Music Controls', value: 
-          '`/play` - Play a song from name/URL\n' +
-          '`/pause` - ⏸️ Pause current playback\n' +
-          '`/resume` - ▶️ Resume playback\n' +
-          '`/stop` - ⏹️ Stop and disconnect\n' +
-          '`/skip` - ⏭️ Skip to next song\n' +
-          '`/volume` - 🔊 Adjust volume (0-100)'
+        { name: '🎵 Kontrol Musik', value: 
+          '`/play` - Memutar musik berdasar nama/URL\n' +
+          '`/pause` - ⏸️ Jeda pemutaran saat ini\n' +
+          '`/resume` - ▶️ Melanjutkan pemutaran\n' +
+          '`/stop` - ⏹️ Stop dan disconnect\n' +
+          '`/skip` - ⏭️ Lompat ke lagu selanjutnya\n' +
+          '`/volume` - 🔊 Mengatur volume (0-100)'
         },
-        { name: '📑 Queue Management', value: 
-          '`/queue` - 📜 View current queue\n' +
-          '`/nowplaying` - 🎵 Show current track\n' +
-          '`/shuffle` - 🔀 Shuffle the queue\n' +
-          '`/loop` - 🔁 Set loop mode\n' +
-          '`/remove` - ❌ Remove a song\n' +
-          '`/move` - ↕️ Move track position'
+        { name: '📑 Manajemen Antrian', value: 
+          '`/queue` - 📜 Melihat antrian\n' +
+          '`/nowplaying` - 🎵 Tampilkan trek saat ini\n' +
+          '`/shuffle` - 🔀 Acak antrian\n' +
+          '`/loop` - 🔁 Mengatur mode pengacakan\n' +
+          '`/remove` - ❌ Menghapus lagu\n' +
+          '`/move` - ↕️ Pindahkan posisi trek'
         },
         { name: '⚙️ Utility', value: 
-          '`/247` - 🔄 Toggle 24/7 mode\n' +
-          '`/ping` - 📡 Check latency\n' +
-          '`/stats` - 📊 View statistics\n' +
-          '`/invite` - 📨 Invite bot to server\n' +
+          '`/247` - 🔄 Beralih ke mode 24/7\n' +
+          '`/ping` - 📡 Periksa latensi\n' +
+          '`/stats` - 📊 Lihat statistik\n' +
+          '`/invite` - 📨 Invite BOT ke server\n' +
           '`/support` - 💬 Join support server'
         }
       )
       .setColor('#FF0000')
       .setThumbnail(client.user.displayAvatarURL())
       .setFooter({ 
-        text: `Made By Unknownz • Requested by ${interaction.user.tag}`,
+        text: `Made By EdriiV7 • Requested by ${interaction.user.tag}`,
         iconURL: interaction.user.displayAvatarURL()
       })
       .setTimestamp();
@@ -612,7 +612,7 @@ client.on('interactionCreate', async (interaction) => {
   if (commandName === 'invite') {
     const embed = new EmbedBuilder()
       .setTitle('📨 Invite Me')
-      .setDescription(`[Click here to invite me to your server](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`)
+      .setDescription(`[Klik disini untuk mengundang BOT](https://discord.com/api/oauth2/authorize?client_id=${client.user.id}&permissions=8&scope=bot%20applications.commands)`)
       .setColor('#FF0000')
       .setFooter({ 
         text: `Requested by ${interaction.user.tag}`,
@@ -666,7 +666,7 @@ client.on('interactionCreate', async (interaction) => {
   if (commandName === 'support') {
     const embed = new EmbedBuilder()
       .setTitle('💬 Support Server')
-      .setDescription(`[Click here to join our support server](${process.env.SUPPORT_SERVER})`)
+      .setDescription(`[Klik disini untuk bergabung](${process.env.SUPPORT_SERVER})`)
       .setColor('#FF0000')
       .setFooter({ 
         text: `Requested by ${interaction.user.tag}`,
@@ -702,7 +702,7 @@ manager.on('queueEnd', (player) => {
   const channel = client.channels.cache.get(player.textChannel);
   if (channel) {
     const embed = new EmbedBuilder()
-      .setDescription('Queue has ended!')
+      .setDescription('Antrian telah berakhir!')
       .setColor('#FF0000')
       .setTimestamp();
     channel.send({ embeds: [embed] });
